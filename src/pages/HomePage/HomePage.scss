@@ -4,7 +4,8 @@
     background-color: rgba(0, 0, 255, 0.15);
     width: calc(100% - 54px);
     height: calc(100% - 54px);
-    padding: 27px;
+    padding: 27px;  
+    min-height: 100vh;  
     .dogs-container{
         margin-top: 99px;
         display: flex;

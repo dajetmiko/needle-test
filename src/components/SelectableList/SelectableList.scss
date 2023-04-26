@@ -1,0 +1,26 @@
+.selectable-list-needle{
+    list-style-type: none;
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    height: fit-content;
+    padding: 0;
+    align-items: start;
+    margin: 0;
+    li{
+        font-family: "Work Sans", sans-serif;
+        width: 100%;
+        text-align: left;
+        margin-bottom: 15px;
+        padding: 8.5px 0;
+        transition: all 300ms;
+        border-radius: 6px;
+        &:hover{
+            cursor: pointer;
+            width: calc(100% - 34px);
+            padding: 8.5px 17px;
+            background-color: rgba(251, 231, 195, 1);
+            
+        }
+    }
+}

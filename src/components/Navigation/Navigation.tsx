@@ -4,6 +4,7 @@ import profileImage from "./profile.svg"
 import menu from "./menu.svg"
 import LoginMenu from "../LoginMenu/LoginMenu"
 import HoverComponents from "../HoverComponents/HoverComponents"
+import BreedsMenu from "../BreedsMenu/BreedsMenu"
 
 const Navigation: FC<INavigation> = ({}) => {
 
@@ -14,18 +15,23 @@ const Navigation: FC<INavigation> = ({}) => {
       </h1>
       <div className="navigation">
         <HoverComponents 
+          onHover={<BreedsMenu />}
+          leftHover={-320}
+          topHover={50}>
+          <button className="nav-breed icon-margin">
+            <img className="img-nav-breed" src={menu}/>
+          </button>
+        </HoverComponents>
+        <HoverComponents 
           onHover={<LoginMenu />}
           leftHover={-370}
           topHover={50}>
           <button className="nav-breed">
-            <img className="img-nav-breed" src={menu}/>
+            <img className="img-nav-breed" src={profileImage}/>
           </button>
         </HoverComponents>
-
         
-        <button className="nav-breed">
-          <img className="img-nav-breed" src={profileImage}/>
-        </button>
+
       </div>
     </nav>
   )
