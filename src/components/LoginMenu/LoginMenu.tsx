@@ -42,9 +42,24 @@ const Login: FC<IFirstLogin> = ({loginState, setLoginState}) => {
     <div className="login-app">
       <TextInput label="Email" inputName="first-login-app" className="input-email"/>
       <TextInput label="Email" hideSeek inputName="first-login-app" className="input-password"/>
+      <TextInput label="Email" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
       <ButtonDoggo addedClassName="button-login">
         Login
       </ButtonDoggo>
+      <p className="account-already">Already have an account? <span>Click here</span></p>
+    </div>
+  )
+}
+
+const Signup: FC<IFirstLogin> = ({loginState, setLoginState}) => {
+  return (
+    <div className="login-app">
+      <TextInput label="Email" inputName="first-login-app" className="input-email"/>
+      <TextInput label="Email" hideSeek inputName="first-login-app" className="input-password"/>
+      <ButtonDoggo addedClassName="button-login">
+        Login
+      </ButtonDoggo>
+      <p className="account-already">Already have an account? <span>Click here</span></p>
     </div>
   )
 }

@@ -8,6 +8,10 @@
     border: 1px solid rgba(212, 212, 212, 1);
     position: relative;
     width: calc(100% - 32px);
+    &:focus-within{
+        border: 1px solid rgba(243, 182, 76, 1);
+
+    }
 
     .input-breeds{
         display: flex;
@@ -29,7 +33,7 @@
 
     label{
         position: absolute;
-        top: -5px;
+        top: -9px;
         left: 10px;
         font-size: 14px;
         font-weight: 400;
@@ -37,6 +41,7 @@
         background-color: #FFFFFF;
         font-family: "Futura";
         z-index: 1;
+        padding: 0 5px;
     }
 
     .password-eyes{
