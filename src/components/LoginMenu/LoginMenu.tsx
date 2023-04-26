@@ -1,5 +1,6 @@
 import useClickOutside from "../../utils/useClickOutside";
 import ButtonDoggo from "../ButtonDoggo/ButtonDoggo"
+import Chip from "../Chip/Chip";
 import TextInput from "../TextInput/TextInput";
 import "./LoginMenu.scss"
 import { Dispatch, FC, SetStateAction, useState } from "react"
@@ -8,7 +9,8 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
   return (
     <div className="container-all-login">
-      <Login loginState={loginState} setLoginState={setLoginState}/>
+      <Signup loginState={loginState} setLoginState={setLoginState}/>
+      {/* <Login loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
     </div>
   )
@@ -37,29 +39,44 @@ const FirstLogin: FC<IFirstLogin> = ({loginState, setLoginState}) => {
   )
 }
 
-const Login: FC<IFirstLogin> = ({loginState, setLoginState}) => {
+const Login: FC<ILogin> = ({loginState, setLoginState}) => {
   return (
     <div className="login-app">
       <TextInput label="Email" inputName="first-login-app" className="input-email"/>
-      <TextInput label="Email" hideSeek inputName="first-login-app" className="input-password"/>
-      <TextInput label="Email" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
+      <TextInput label="Password" hideSeek inputName="first-login-app" className="input-password"/>
       <ButtonDoggo addedClassName="button-login">
         Login
+      </ButtonDoggo>
+      <p className="account-already">Don't have an account? <span>Click here</span></p>
+    </div>
+  )
+}
+
+const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
+  return (
+    <div className="signup-app">
+      <TextInput label="Email" inputName="email-login-app" className="input-email"/>
+      <TextInput label="Password" hideSeek inputName="first-login-app" className="input-password"/>
+      <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
+      <div className="chip-container">
+        <Chip item="breedsss" index={0} deleteButton/>
+        <Chip item="breess" index={0} deleteButton/>
+        <Chip item="bre" index={0} deleteButton/>
+        <Chip item="breedsss" index={0} deleteButton/>
+
+      </div>
+      <ButtonDoggo addedClassName="button-login">
+        Create an account 
       </ButtonDoggo>
       <p className="account-already">Already have an account? <span>Click here</span></p>
     </div>
   )
 }
 
-const Signup: FC<IFirstLogin> = ({loginState, setLoginState}) => {
+const SignedIn: FC<ISignedIn> = ({}) => {
   return (
-    <div className="login-app">
-      <TextInput label="Email" inputName="first-login-app" className="input-email"/>
-      <TextInput label="Email" hideSeek inputName="first-login-app" className="input-password"/>
-      <ButtonDoggo addedClassName="button-login">
-        Login
-      </ButtonDoggo>
-      <p className="account-already">Already have an account? <span>Click here</span></p>
+    <div className="signed-in-app">
+
     </div>
   )
 }
@@ -69,6 +86,18 @@ interface IFirstLogin {
   loginState: TLoginState
   setLoginState: Dispatch<SetStateAction<TLoginState>>
 }
-type TLoginState = "LOGINSTART" | "LOGIN" | "CREATEACCOUNT" | "LOADINGIN" | "LOADINGOUT"
+interface ILogin {
+  loginState: TLoginState
+  setLoginState: Dispatch<SetStateAction<TLoginState>>
+}
+interface ISignup {
+  loginState: TLoginState
+  setLoginState: Dispatch<SetStateAction<TLoginState>>
+}
+interface ISignedIn {
+  loginState: TLoginState
+  setLoginState: Dispatch<SetStateAction<TLoginState>>
+}
+type TLoginState = "LOGINSTART" | "LOGIN" | "CREATEACCOUNT" | "LOADINGIN" | "LOADINGOUT" | "SIGNEDIN"
 
 export default LoginMenu

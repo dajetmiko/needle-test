@@ -1,5 +1,6 @@
 import "./Chip.scss"
 import { FC } from "react"
+import chipDelete from "./chip-delete.svg"
 
 const Chip: FC<IChip> = ({deleteButton, onDelete, index, item}) => {
 
@@ -10,7 +11,7 @@ const Chip: FC<IChip> = ({deleteButton, onDelete, index, item}) => {
       </p>
       {deleteButton && 
         <button className="delete-button-chip" onClick={() => onDelete && onDelete(index)}>
-          <img />
+          <img src={chipDelete} />
         </button>
       }
     </div>
