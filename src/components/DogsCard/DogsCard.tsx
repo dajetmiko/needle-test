@@ -9,10 +9,10 @@ const DogsCard: FC<IDogsCard> = ({}) => {
       <div className="dogs-card">
         <img src={testImage} className="dogs-image"/>
         <div className="dogs-info">
-          <p>
+          <p className="dogs-name">
             Doggo 1
           </p>
-          <img src={love}/>
+          <img className="dogs-love" src={love}/>
         </div>
       </div>
     </div>

@@ -37,8 +37,19 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-            p{
+            height: 35px;
+            align-items: center;
+            .dogs-name{
                 margin: 0;
+                font-family: "Work Sans";
+                font-weight: 400;
+                margin-left: 15px;
+            };
+            .dogs-love{
+                margin: 0;
+                width: 20px;
+                height: 18px;
+                margin-right: 15px;
             }
         }
     }

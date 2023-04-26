@@ -10,6 +10,7 @@ const BreedsMenu: FC<IBreedsMenu> = ({}) => {
         <h2 className="breeds-title">
           Breeds
         </h2>
+        <input placeholder="Filter Breeds" className="filter-breeds"/>
         <div className="divider-login">
           <div className="divider-line"/>
           <p className="divider-text">

@@ -19,7 +19,7 @@ const Navigation: FC<INavigation> = ({}) => {
       <div className="navigation">
         <HoverComponents 
           onHover={<BreedsMenu />}
-          leftHover={-320}
+          leftHover={-285}
           topHover={50}>
           <button className="nav-breed icon-margin">
             <img className="img-nav-breed" src={menu}/>
@@ -28,7 +28,7 @@ const Navigation: FC<INavigation> = ({}) => {
         <HoverComponents 
           onHover={<LoginMenu />}
           refK={ref}
-          leftHover={-370}
+          leftHover={-320}
           topHover={50}
           open={openProfile}>
           <button className="nav-breed" onClick={() => setOpenProfile(!openProfile)}>

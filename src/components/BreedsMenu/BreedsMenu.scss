@@ -46,6 +46,20 @@
             margin: 15px 0 15px 0;
             background-color: #000000;
         }
+        .filter-breeds{
+            width: calc(100% - 38px);
+            padding: 7px 19px;
+            border: 1px solid rgba(0, 0, 0, 0.2);   
+            background-color: #00000000;
+            border-radius: 21px;
+            font-size: 18px;
+            font-weight: 400;
+            font-family: "Work Sans", sans-serif;
+            margin-bottom: 17px;
+            &:focus{
+                outline: none;
+            }
+        }
     }
 
     
