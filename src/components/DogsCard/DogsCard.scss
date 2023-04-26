@@ -1,5 +1,45 @@
 
 
-.dogs-card{
-    width: calc((100% / 3) - 54px);
+.dogs-card-container{
+    width: calc((100% / 3) - 1.8%);
+    padding-bottom: calc((108.963585434% / 3) - 1.8%);
+    position: relative;
+    overflow:visible;
+    margin-right: 2%;
+    margin-bottom: 3%;
+    &:nth-child(3n+0){
+        margin-right: 0;
+
+    };
+
+    .dogs-card{
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        border-radius: 16px;
+        overflow: hidden;
+        background-color: #FFFFFF;
+
+        .dogs-image{    
+            width: 100%;
+            height: calc(100% - 46px);
+            object-fit: cover;
+        };
+        &:hover{
+            cursor: pointer;
+            top: -4px;
+            left: -4px;
+            box-shadow: 4px 4px 0 #000000;
+        }
+        .dogs-info{
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            p{
+                margin: 0;
+            }
+        }
+    }
 }

@@ -2,6 +2,14 @@
 
 .dogs-feeds{
     background-color: rgba(0, 0, 255, 0.15);
-    width: 100%;
-    height: 100%;
+    width: calc(100% - 54px);
+    height: calc(100% - 54px);
+    padding: 27px;
+    .dogs-container{
+        margin-top: 99px;
+        display: flex;
+        flex-direction: row;
+        flex-wrap: wrap;
+
+    }
 }
