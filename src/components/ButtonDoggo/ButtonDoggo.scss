@@ -1,0 +1,17 @@
+.button-doggo-component{
+    width: 100%;
+    height: fit-content;
+    justify-content: center;
+    padding: 12px 0;
+    background-color: #F3B64C;
+    transition: all 300ms;
+    border: none;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: 500;
+
+    &:hover{
+        background-color: rgba(227, 150, 15, 1);
+        cursor: pointer;
+    }
+}
