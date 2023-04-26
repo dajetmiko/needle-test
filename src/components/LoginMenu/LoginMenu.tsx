@@ -6,15 +6,15 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
 
   return (
     <div className="login-menu">
-      <ButtonDoggo>
+      <ButtonDoggo addedClassName="button-login">
         Login
       </ButtonDoggo>
-      <div>
-        <div/>
-        <p>
+      <div className="divider-login">
+        <div className="divider-line"/>
+        <p className="divider-text">
           Or login with
         </p>
-        <div/>
+        <div className="divider-line"/>
       </div>
       <button>
         Login with facebook
