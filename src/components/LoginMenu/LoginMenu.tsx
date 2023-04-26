@@ -1,4 +1,6 @@
+import useClickOutside from "../../utils/useClickOutside";
 import ButtonDoggo from "../ButtonDoggo/ButtonDoggo"
+import TextInput from "../TextInput/TextInput";
 import "./LoginMenu.scss"
 import { Dispatch, FC, SetStateAction, useState } from "react"
 
@@ -6,8 +8,8 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
   return (
     <div className="container-all-login">
-      <FirstLogin loginState={loginState} setLoginState={setLoginState}/>
-
+      <Login loginState={loginState} setLoginState={setLoginState}/>
+      {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
     </div>
   )
 }
@@ -38,14 +40,7 @@ const FirstLogin: FC<IFirstLogin> = ({loginState, setLoginState}) => {
 const Login: FC<IFirstLogin> = ({loginState, setLoginState}) => {
   return (
     <div className="login-app">
-
-      <div className="divider-login">
-        <div className="divider-line"/>
-        <p className="divider-text">
-          Or login with
-        </p>
-        <div className="divider-line"/>
-      </div>
+      <TextInput label="Email" inputName="first-login-app"/>
       <ButtonDoggo addedClassName="button-login">
         Login
       </ButtonDoggo>
