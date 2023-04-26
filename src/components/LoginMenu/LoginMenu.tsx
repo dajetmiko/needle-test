@@ -40,7 +40,8 @@ const FirstLogin: FC<IFirstLogin> = ({loginState, setLoginState}) => {
 const Login: FC<IFirstLogin> = ({loginState, setLoginState}) => {
   return (
     <div className="login-app">
-      <TextInput label="Email" inputName="first-login-app"/>
+      <TextInput label="Email" inputName="first-login-app" className="input-email"/>
+      <TextInput label="Email" hideSeek inputName="first-login-app" className="input-password"/>
       <ButtonDoggo addedClassName="button-login">
         Login
       </ButtonDoggo>
