@@ -1,7 +1,7 @@
 
 
 
-interface IBreedsData {
+export interface IBreedsData {
   breedsName: string;
   linkList: string;
   images: string[];
