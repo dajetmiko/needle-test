@@ -1,15 +1,18 @@
+import { ListFormat } from "typescript";
 import useClickOutside from "../../utils/useClickOutside";
 import ButtonDoggo from "../ButtonDoggo/ButtonDoggo"
 import Chip from "../Chip/Chip";
 import TextInput from "../TextInput/TextInput";
 import "./LoginMenu.scss"
 import { Dispatch, FC, SetStateAction, useState } from "react"
+import SelectableList from "../SelectableList/SelectableList";
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
   return (
     <div className="container-all-login">
-      <Signup loginState={loginState} setLoginState={setLoginState}/>
+      <SignedIn loginState={loginState} setLoginState={setLoginState}/>
+      {/* <Signup loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <Login loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
     </div>
@@ -76,7 +79,10 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
 const SignedIn: FC<ISignedIn> = ({}) => {
   return (
     <div className="signed-in-app">
-
+      <h3>
+        Hello, <span>Disky Aria Jetmiko</span>
+      </h3>
+      <SelectableList listItem={["Liked doggy", "breeds A", "breeds B"]}/>
     </div>
   )
 }

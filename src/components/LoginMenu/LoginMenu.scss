@@ -3,7 +3,7 @@
 .container-all-login{
     width: 80vw;
     max-width: calc(366px - 36px);
-    padding: 57px 36px;
+    padding: 15px 20px;
     background-color: #FFFFFF;
     border-radius: 24px;
 
@@ -80,6 +80,23 @@
                     cursor: pointer;
                     text-decoration: underline;
                 }
+            }
+        }
+    }
+
+    .signed-in-app{
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+
+        h3{
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 32px;
+            font-family: "Futura", sans-serif;
+
+            span{
+                text-decoration: underline;
             }
         }
     }
