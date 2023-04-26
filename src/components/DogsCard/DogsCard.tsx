@@ -1,17 +1,19 @@
 import "./DogsCard.scss"
 import { FC } from "react"
 import testImage from "./test-image.jpg"
+import love from "./love.svg"
 
 const DogsCard: FC<IDogsCard> = ({}) => {
-
   return (
-    <div className="dogs-card">
-      <img src={testImage}/>
-      <div>
-        <p>
-          Doggo 1
-        </p>
-        <img />
+    <div className="dogs-card-container">
+      <div className="dogs-card">
+        <img src={testImage} className="dogs-image"/>
+        <div className="dogs-info">
+          <p>
+            Doggo 1
+          </p>
+          <img src={love}/>
+        </div>
       </div>
     </div>
   )

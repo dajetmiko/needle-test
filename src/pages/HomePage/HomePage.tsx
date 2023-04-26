@@ -6,12 +6,18 @@ import { FC } from "react"
 const HomePage: FC<IHomePage> = ({}) => {
 
   return (
-    <div className="dogs-feeds">
-      <Navigation />
-      <div className="dogs-container">
-        <DogsCard />
+
+      <div className="dogs-feeds">
+        <Navigation />
+        <div className="dogs-container">
+          <DogsCard />
+          <DogsCard />
+          <DogsCard />
+          <DogsCard />
+          <DogsCard />
+
+        </div>
       </div>
-    </div>
   )
 }
 
