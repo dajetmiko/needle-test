@@ -7,10 +7,30 @@
     overflow:visible;
     margin-right: 2.5%;
     margin-bottom: 3%;
-    &:nth-child(3n+0){
-        margin-right: 0;
+    @media screen and (min-width: 1000px) {
+        &:nth-child(3n+0){
+            margin-right: 0;
+        };
+    }
 
-    };
+
+    @media screen and (max-width: 1000px) {
+        width: calc((100% / 2) - 1.4%);
+        padding-bottom: calc((108.963585434% / 2) - 1.4%);
+        margin-right: 2.5%;
+        margin-bottom: 3%;
+        &:nth-child(2n+0){
+            margin-right: 0;
+        };
+    }
+
+    @media screen and (max-width: 600px) {
+        width: calc((100%));
+        padding-bottom: calc((108.963585434%));
+        margin-right: 2.5%;
+        margin-bottom: 3%;
+        margin-right: 0;
+    }
 
     .dogs-card{
         position: absolute;
