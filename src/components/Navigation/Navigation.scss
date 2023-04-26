@@ -12,10 +12,12 @@
     position: fixed;
     top: 24px;
     box-shadow: 2px 2px 0 #000000;
+    z-index: 5;
     
     h1{
         font-size: 20px;
         margin: 0;
+        font-family: "Futura", sans-serif;
     }
 
     .navigation{

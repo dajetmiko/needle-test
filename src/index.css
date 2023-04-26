@@ -7,6 +7,78 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-Light.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-LightOblique.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT.woff') format('woff');
+  font-weight: 500;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-Oblique.woff') format('woff');
+  font-weight: 500;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-Book.woff') format('woff');
+  font-weight: 600;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-BookOblique.woff') format('woff');
+  font-weight: 600;
+  font-style: italic;
+}
+
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-Bold.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-BoldOblique.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-ExtraBold.woff') format('woff');
+  font-weight: 800;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: Futura;
+  src: url('./assets/FuturaLT-ExtraBoldOblique.woff') format('woff');
+  font-weight: 800;
+  font-style: italic;
+}
+
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
