@@ -4,7 +4,7 @@ import { FC } from "react"
 const HomePage: FC<IHomePage> = ({}) => {
 
   return (
-    <div>
+    <div className="dogs-feeds">
     </div>
   )
 }
