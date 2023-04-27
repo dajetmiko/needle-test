@@ -259,7 +259,7 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
       <ButtonDoggo addedClassName="button-login" onClick={handleSignup}>
         Create an account 
       </ButtonDoggo>
-      <p className="account-already">Already have an account? <span onClick={() => setLoginState("LOGIN")}>Click here</span></p>
+      <p className="account-already">Already have an account? <span onClick={() => setLoginState("LOGINSTART")}>Click here</span></p>
     </div>
   )
 }
