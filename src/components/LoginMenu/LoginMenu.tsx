@@ -11,9 +11,10 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
   return (
     <div className="container-all-login">
-      <SignedIn loginState={loginState} setLoginState={setLoginState}/>
+      {/* <SignedIn loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <Signup loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <Login loginState={loginState} setLoginState={setLoginState}/> */}
+      <SignupFavorite loginState={loginState} setLoginState={setLoginState}/>
       {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
     </div>
   )
@@ -66,12 +67,28 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
         <Chip item="breess" index={0} deleteButton/>
         <Chip item="bre" index={0} deleteButton/>
         <Chip item="breedsss" index={0} deleteButton/>
-
       </div>
       <ButtonDoggo addedClassName="button-login">
         Create an account 
       </ButtonDoggo>
       <p className="account-already">Already have an account? <span>Click here</span></p>
+    </div>
+  )
+}
+
+const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
+  return (
+    <div className="signup-app">
+      <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
+      <div className="chip-container">
+        <Chip item="breedsss" index={0} deleteButton/>
+        <Chip item="breess" index={0} deleteButton/>
+        <Chip item="bre" index={0} deleteButton/>
+        <Chip item="breedsss" index={0} deleteButton/>
+      </div>
+      <ButtonDoggo addedClassName="button-login">
+        Create an account
+      </ButtonDoggo>
     </div>
   )
 }
@@ -104,6 +121,6 @@ interface ISignedIn {
   loginState: TLoginState
   setLoginState: Dispatch<SetStateAction<TLoginState>>
 }
-type TLoginState = "LOGINSTART" | "LOGIN" | "CREATEACCOUNT" | "LOADINGIN" | "LOADINGOUT" | "SIGNEDIN"
+type TLoginState = "LOGINSTART" | "LOGIN" | "CREATEACCOUNT" | "LOADINGIN" | "CHOSEFAVORITE" | "LOADINGOUT" | "SIGNEDIN"
 
 export default LoginMenu
