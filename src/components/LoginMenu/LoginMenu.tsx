@@ -7,6 +7,7 @@ import "./LoginMenu.scss"
 import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
 import SelectableList from "../SelectableList/SelectableList";
 import { createAccount, login } from "../../utils/passwordAuth";
+import ErrorText from "../ErrorText/ErrorText";
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
@@ -65,7 +66,9 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
   const [password, setPassword] = useState("")
   const [passwordError, setPasswordError] = useState<string | null>(null);
   const [favorite, setFavorite] = useState<string[]>([])
+  const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
   const handleSignup = async () => {
+    resetError();
     let error = false
     if(name === ""){
       setNameError("Please input your name")
@@ -85,11 +88,19 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
       const er: any = e as any
       if(er.code === "auth/email-already-in-use"){
         setEmailError("Email is already in use")
-      }
-      if(er.code === "auth/invalid-email"){
+      }else if(er.code === "auth/invalid-email"){
         setEmailError("Invalid email format")
+      }else{
+        setErrorGeneral("Something is wrong")
       }
+
     }
+  }
+  const resetError = () => {
+    setNameError(null);
+    setEmailError(null);
+    setPasswordError(null);
+    setErrorGeneral(null)
   }
   return (
     <div className="signup-app">
@@ -109,6 +120,7 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
           setFavorite(newFavorite);
         }}/>
       </div>
+      {errorGeneral && <ErrorText>{errorGeneral}</ErrorText>}
       <ButtonDoggo addedClassName="button-login" onClick={handleSignup}>
         Create an account 
       </ButtonDoggo>
