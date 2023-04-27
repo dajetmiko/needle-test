@@ -10,6 +10,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { IRootRedux } from './store/reducers';
 import { User } from 'firebase/auth';
 import { Routes, Route} from 'react-router';
+import LikedPage from './pages/LikedPage/LikedPage';
 
 function App() {
   useAuthStateChange()
@@ -33,7 +34,7 @@ function App() {
         />
         <Route
           path="/liked"
-          element={<HomePage />}
+          element={<LikedPage />}
         />
 
       </Routes>

@@ -96,7 +96,7 @@ const Login: FC<ILogin> = ({loginState, setLoginState}) => {
         setErrorPassword("Wrong password")
       }
       if(er.code === "auth/user-not-found"){
-        setErrorEmail("Wrong password")
+        setErrorEmail("User not found")
       }
       console.error(er)
     }
@@ -309,7 +309,7 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
       newFavFilter.push(text)
     })
     setFavoriteFilter(newFavFilter)
-  }, [keysFavorite])
+  }, [listBreed])
   const onFilterDoggo = (e: ChangeEvent<HTMLInputElement>) => {
     const regWord = new RegExp(e.currentTarget.value);
     setFavoriteInput(e.currentTarget.value);
