@@ -23,8 +23,7 @@ const DogsCard: FC<IDogsCard> = ({keyBreed}) => {
     }
     fetch()
   }, [keyBreed])
-  console.log(dogsData)
-  console.log(keyBreed)
+
   return (
     <div className="dogs-card-container">
       <div className="dogs-card">
