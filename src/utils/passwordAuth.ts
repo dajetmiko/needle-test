@@ -1,7 +1,7 @@
 
 
 import { getAuth, createUserWithEmailAndPassword, updateProfile, signInWithEmailAndPassword, onAuthStateChanged, User, signInWithPopup } from "firebase/auth";
-import { doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
+import { Timestamp, doc, getDoc, getFirestore, setDoc } from "firebase/firestore";
 import { app, provider } from "../data/firebaseSetup";
 import { IUserData } from "../data/userData";
 import { useEffect } from "react";
@@ -50,7 +50,8 @@ export const createAccount = async (email: string,
             userId: userCred.user.uid,
             email: userCred.user.email,
             name: name,
-            favoriteDogs: favoriteDogs
+            favoriteDogs: favoriteDogs,
+            dateAdded: Timestamp.now()
         }
         await setDoc(doc(db, "user", userData.userId), userData);
         dispatch(storeUser(userCred.user))
@@ -80,7 +81,8 @@ export const createAccountData = async (
             userId: user.uid,
             email: user.email,
             name: name,
-            favoriteDogs: favoriteDogs
+            favoriteDogs: favoriteDogs,
+            dateAdded: Timestamp.now()
         }
         await setDoc(doc(db, "user", userData.userId), userData);
         dispatch(storeUser(user))
