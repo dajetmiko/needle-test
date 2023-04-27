@@ -7,6 +7,7 @@ const SelectableList: FC<ISelectableList> = ({listItem, onSelected, onIndexSelec
     <ul className="selectable-list-needle">
       {
         listItem.map((item, index) => <li className="selectable-list" onClick={() => {
+          console.log("selected")
           onSelected && onSelected(item);
           onIndexSelected && onIndexSelected(index);
         }}>{item}</li>)

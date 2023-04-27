@@ -6,10 +6,17 @@ import { app } from "../data/firebaseSetup";
 import { IUserData } from "../data/userData";
 import { useEffect } from "react";
 import { useDispatch } from "react-redux";
-import { storeUser } from "../store/actions/ui";
+import { storeUser, storeUserData } from "../store/actions/ui";
+import { FirebaseError } from "firebase/app";
+import { AnyAction, Dispatch } from "redux";
 
 
-export const createAccount = async (email: string, password: string, name: string) => {
+export const createAccount = async (email: string, 
+    password: string, 
+    name: string, 
+    favoriteDogs: string[], 
+    dispatch: Dispatch<AnyAction>
+) => {
     const auth = getAuth(app)
     const db = getFirestore(app)
     try{  
@@ -18,11 +25,14 @@ export const createAccount = async (email: string, password: string, name: strin
         const userData: IUserData = {
             userId: userCred.user.uid,
             email: userCred.user.email,
-            name: name
+            name: name,
+            favoriteDogs: favoriteDogs
         }
         await setDoc(doc(db, "user", userData.userId), userData);
+        dispatch(storeUser(userCred.user))
+        dispatch(storeUserData(userData))
     }catch(e){
-        const er = e as any;
+        const er = e as FirebaseError;
         console.error("Failed login")
         console.error("error code: ", er.code)
         console.error("error message: ", er.message)
@@ -51,7 +61,7 @@ export const useAuthStateChange = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-            dispatch(storeUser(user))
+
         })
     }, [])
 }

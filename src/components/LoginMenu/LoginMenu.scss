@@ -87,6 +87,23 @@
         }
     }
 
+    .container-favorite{
+        display: flex;
+        position: relative;
+        width: 100%;
+        .container-list-favorite{
+            width: 80vw;
+            max-width: 330px;
+            position: absolute;
+            top: 60px;
+            padding: 20px;
+            background-color: #FFFFFF;
+            height: fit-content;
+            max-height: 200px;
+            overflow-y: scroll;
+        }
+    }
+
     .signed-in-app{
         display: flex;
         flex-direction: column;

@@ -10,7 +10,7 @@ import useClickOutside from "../../utils/useClickOutside"
 const Navigation: FC<INavigation> = ({}) => {
   const [openProfile, setOpenProfile] = useState(false);
   const ref = useRef<HTMLDivElement>(null)
-  useClickOutside(() => {setOpenProfile(false); console.log("a")}, openProfile, ref)
+  useClickOutside(() => {setOpenProfile(false); console.log("a")}, openProfile, [ref])
   return (
     <nav className="app-navigation">
       <h1 className="title-explorer">

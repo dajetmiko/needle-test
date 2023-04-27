@@ -4,17 +4,37 @@ import ButtonDoggo from "../ButtonDoggo/ButtonDoggo"
 import Chip from "../Chip/Chip";
 import TextInput from "../TextInput/TextInput";
 import "./LoginMenu.scss"
-import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
+import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react"
 import SelectableList from "../SelectableList/SelectableList";
 import { createAccount, login } from "../../utils/passwordAuth";
 import ErrorText from "../ErrorText/ErrorText";
+import { FirebaseError } from "firebase/app";
+import { IResponseList, useFetchAPI } from "../../data/fetch/fetchAPI";
+import { useDispatch, useSelector } from "react-redux";
+import { IRootRedux } from "../../store/reducers";
+import { User } from "firebase/auth";
+import { IUserData } from "../../data/userData";
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
-  const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
+  const [loginState, setLoginState] = useState<TLoginState>("CREATEACCOUNT");
+  const user = useSelector<IRootRedux, User | null>(state => (state?.ui?.user || null));
+  const userData = useSelector<IRootRedux, IUserData | null>(state => (state?.ui?.userData || null));
+  useEffect(() => {
+    if(user && userData){
+      setLoginState("SIGNEDIN")
+    }
+    if(user){
+      setLoginState("CHOSEFAVORITE")
+    }
+  }, [user])
   return (
     <div className="container-all-login">
-      {/* <SignedIn loginState={loginState} setLoginState={setLoginState}/> */}
-      <Signup loginState={loginState} setLoginState={setLoginState}/>
+      {loginState === "SIGNEDIN" ? 
+        <SignedIn loginState={loginState} setLoginState={setLoginState}/>
+        : <Signup loginState={loginState} setLoginState={setLoginState}/>
+        
+
+      }
       {/* <Login loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <SignupFavorite loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
@@ -58,6 +78,8 @@ const Login: FC<ILogin> = ({loginState, setLoginState}) => {
   )
 }
 
+const maximumDog = 3
+
 const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
   const [name, setName] = useState("")
   const [nameError, setNameError] = useState<string | null>(null);
@@ -65,8 +87,16 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
   const [emailError, setEmailError] = useState<string | null>(null);
   const [password, setPassword] = useState("")
   const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [favoriteInput, setFavoriteInput] = useState("");
+  const [favoriteError, setFavoriteError] = useState<string | null>(null);
+
+  const [favoriteFilter, setFavoriteFilter] = useState<string[]>([]);
+  const [focusFavorite, setFocusFavorite] = useState(false)
   const [favorite, setFavorite] = useState<string[]>([])
   const [errorGeneral, setErrorGeneral] = useState<string | null>(null)
+  const [listBreed] 
+    = useFetchAPI<IResponseList>("https://dog.ceo/api/breeds/list/all")
+  const dispatch = useDispatch();
   const handleSignup = async () => {
     resetError();
     let error = false
@@ -82,10 +112,15 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
       setPasswordError("Please input password");
       error = true;
     }
+    if(favorite.length === 0){
+      setPasswordError("Please your favorite doggo");
+      error = true;
+    }
+    if(error) return;
     try{
-      await createAccount(email, password, name)
+      await createAccount(email, password, name, favorite, dispatch);
     }catch(e){
-      const er: any = e as any
+      const er: FirebaseError = e as FirebaseError
       if(er.code === "auth/email-already-in-use"){
         setEmailError("Email is already in use")
       }else if(er.code === "auth/invalid-email"){
@@ -93,15 +128,47 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
       }else{
         setErrorGeneral("Something is wrong")
       }
-
     }
   }
+  const keysFavorite = Object.keys(listBreed?.message || {})
   const resetError = () => {
     setNameError(null);
     setEmailError(null);
     setPasswordError(null);
     setErrorGeneral(null)
   }
+  const onBreedsSelected = (item: string) => {
+    const newFav = [...favorite];
+    const alreadyExist = newFav.includes(item)
+    const maximum = newFav.length >= maximumDog
+    if(alreadyExist || maximum){
+      setFavorite(newFav);
+      setFocusFavorite(false);
+      setFavoriteInput("");
+      if(maximum){
+        setFavoriteError("Maximum 3 doggo breeds")
+      }
+      return;
+    }
+    newFav.push(item);
+    setFavorite(newFav);
+    setFocusFavorite(false);
+    setFavoriteInput("");
+  }
+  const onFilterDoggo = (e: ChangeEvent<HTMLInputElement>) => {
+    const regWord = new RegExp(e.currentTarget.value);
+    setFavoriteInput(e.currentTarget.value);
+    setFavoriteFilter([])
+    let newFavFilter: string[] = []
+    keysFavorite.forEach((text) => {
+      if(regWord.test(text)){
+        newFavFilter.push(text)
+      }
+    })
+    setFavoriteFilter(newFavFilter)
+  }
+  const refSelectable = useRef(null);
+  useClickOutside(() => setFocusFavorite(false), focusFavorite, [refSelectable])
   return (
     <div className="signup-app">
       <TextInput label="Email" onChange={(e) => setEmail(e.currentTarget.value)} 
@@ -113,12 +180,26 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
       <TextInput label="Password" onChange={(e) => setPassword(e.currentTarget.value)} 
         errorMessage={passwordError}
         hideSeek inputName="first-login-app" className="input-password"/>
-      <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
+      <div className="container-favorite" ref={refSelectable}>
+        <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo"
+        value={favoriteInput}
+        errorMessage={favoriteError}
+        onFocus={() => setFocusFavorite(true)}
+        onChange={onFilterDoggo}/>
+        {focusFavorite && <div className="container-list-favorite" >
+          <SelectableList listItem={favoriteFilter} 
+            onSelected={onBreedsSelected}
+          />
+        </div>}
+      </div>
       <div className="chip-container">
-        <Chip item="breedsss" index={0} deleteButton onDelete={(index) => {
-          const newFavorite = [...favorite].splice(index, 1)
-          setFavorite(newFavorite);
-        }}/>
+        {favorite.map((breed, index) => 
+          <Chip item={breed} index={index} deleteButton onDelete={(index) => {
+            const newFavorite = [...favorite]
+            newFavorite.splice(index, 1)
+            setFavorite(newFavorite);
+          }}/>)
+        }
       </div>
       {errorGeneral && <ErrorText>{errorGeneral}</ErrorText>}
       <ButtonDoggo addedClassName="button-login" onClick={handleSignup}>
@@ -130,14 +211,74 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
 }
 
 const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
+  const user = useSelector<IRootRedux, User | null>(state => (state?.ui?.user || null));
+
+  const [listBreed] 
+    = useFetchAPI<IResponseList>("https://dog.ceo/api/breeds/list/all")
+  const [favorite, setFavorite] = useState<string[]>([])
+  const [favoriteInput, setFavoriteInput] = useState("");
+  const [focusFavorite, setFocusFavorite] = useState(false);
+  const [favoriteError, setFavoriteError] = useState<string | null>(null)
+  const [favoriteFilter, setFavoriteFilter] = useState<string[]>([])
+
+  const refSelectable = useRef(null);
+  useClickOutside(() => setFocusFavorite(false), focusFavorite, [refSelectable])
+  const keysFavorite = Object.keys(listBreed?.message || {})
+  const resetError = () => {
+    setFavoriteError(null)
+  }
+  const onBreedsSelected = (item: string) => {
+    const newFav = [...favorite];
+    const alreadyExist = newFav.includes(item)
+    const maximum = newFav.length >= maximumDog
+    if(alreadyExist || maximum){
+      setFavorite(newFav);
+      setFocusFavorite(false);
+      setFavoriteInput("");
+      if(maximum){
+        setFavoriteError("Maximum 3 doggo breeds")
+      }
+      return;
+    }
+    newFav.push(item);
+    setFavorite(newFav);
+    setFocusFavorite(false);
+    setFavoriteInput("");
+  }
+  const onFilterDoggo = (e: ChangeEvent<HTMLInputElement>) => {
+    const regWord = new RegExp(e.currentTarget.value);
+    setFavoriteInput(e.currentTarget.value);
+    setFavoriteFilter([])
+    let newFavFilter: string[] = []
+    keysFavorite.forEach((text) => {
+      if(regWord.test(text)){
+        newFavFilter.push(text)
+      }
+    })
+    setFavoriteFilter(newFavFilter)
+  }
   return (
     <div className="signup-app">
-      <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
+      <div className="container-favorite" ref={refSelectable}>
+        <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo"
+        value={favoriteInput}
+        errorMessage={favoriteError}
+        onFocus={() => setFocusFavorite(true)}
+        onChange={onFilterDoggo}/>
+        {focusFavorite && <div className="container-list-favorite" >
+          <SelectableList listItem={favoriteFilter} 
+            onSelected={onBreedsSelected}
+          />
+        </div>}
+      </div>
       <div className="chip-container">
-        <Chip item="breedsss" index={0} deleteButton/>
-        <Chip item="breess" index={0} deleteButton/>
-        <Chip item="bre" index={0} deleteButton/>
-        <Chip item="breedsss" index={0} deleteButton/>
+        {favorite.map((breed, index) => 
+          <Chip item={breed} index={index} deleteButton onDelete={(index) => {
+            const newFavorite = [...favorite]
+            newFavorite.splice(index, 1)
+            setFavorite(newFavorite);
+          }}/>)
+        }
       </div>
       <ButtonDoggo addedClassName="button-login">
         Create an account

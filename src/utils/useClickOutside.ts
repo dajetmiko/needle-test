@@ -5,17 +5,20 @@ import { MutableRefObject } from "react";
 export default function useClickOutside(
     fungsiTrigger: (op: boolean) => void, 
     modalTerbuka: boolean, 
-    ref?: MutableRefObject<HTMLElement | null>
+    refList?: MutableRefObject<HTMLElement | null>[]
 ) {
     useEffect(() => {
         function handelClickOutside(event: any) {
-            console.log(ref?.current)
-            if (ref && ref.current && !ref.current.contains(event.target) && modalTerbuka === true) {
-                console.log("aaa")
+            if((refList || [])?.length === 0) return;
+            const outsideEveryRef = refList?.every((ref) => {
+                const outside = ref && ref.current && !ref.current.contains(event.target) && modalTerbuka === true
+                return outside
+            })
+            if(outsideEveryRef){
                 fungsiTrigger(false)
             }
         }
         document.addEventListener("mousedown", handelClickOutside);
         return () => { document.removeEventListener("mousedown", handelClickOutside) }
-    }, [ref, modalTerbuka])
+    }, [refList, modalTerbuka])
 }
