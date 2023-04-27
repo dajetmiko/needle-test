@@ -5,12 +5,13 @@ export interface IAksiUI {
   payload: {[x: string]: any | number},
 }
 
-const userData = localStorage.getItem("userdoggodata") ? JSON.stringify(localStorage.getItem("userdoggodata") ) : null
-const user = localStorage.getItem("userdoggo") ? JSON.stringify(localStorage.getItem("userdoggodata") ) : null
+const userData = JSON.parse(localStorage.getItem("userdoggodata")  || "null") 
+const user = JSON.parse(localStorage.getItem("userdoggo") || "null")
 const darkMode = localStorage.getItem("darkMode") === "1"
 
 const jsonUI = {ui: {darkMode: darkMode, user: user, userData: userData}}
 const initialCondition = { ...jsonUI}
+console.log(initialCondition)
 
 export function ui(state: any = initialCondition, action: IAksiUI){
   switch(action.type){

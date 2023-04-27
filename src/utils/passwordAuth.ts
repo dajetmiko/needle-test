@@ -61,7 +61,7 @@ export const useAuthStateChange = () => {
     const dispatch = useDispatch();
     useEffect(() => {
         onAuthStateChanged(auth, (user) => {
-
+            dispatch(storeUser(user))
         })
     }, [])
 }

@@ -30,7 +30,7 @@ export const storeUser = (payload: User | null) => {
 export const storeUserData = (payload: IUserData | null) => {
   const tipe: TypeAction = "SAVE_USER_DATA"
   const payloadItem = {
-    user: payload
+    userData: payload
   }
   localStorage.setItem("userdoggodata", JSON.stringify(payload));
   return {

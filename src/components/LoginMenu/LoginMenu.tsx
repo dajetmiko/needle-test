@@ -14,6 +14,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { IRootRedux } from "../../store/reducers";
 import { User } from "firebase/auth";
 import { IUserData } from "../../data/userData";
+import logoutBtn from "./logout-btn.svg"
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("CREATEACCOUNT");
@@ -22,20 +23,26 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
   useEffect(() => {
     if(user && userData){
       setLoginState("SIGNEDIN")
-    }
-    if(user){
+    }else if(user){
       setLoginState("CHOSEFAVORITE")
+    }else{
+      setLoginState("LOGIN")
+
     }
-  }, [user])
+  }, [user, userData])
   return (
     <div className="container-all-login">
       {loginState === "SIGNEDIN" ? 
         <SignedIn loginState={loginState} setLoginState={setLoginState}/>
+        : loginState === "CHOSEFAVORITE" ?
+        <SignupFavorite loginState={loginState} setLoginState={setLoginState} /> 
+        : loginState === "LOGIN" ? 
+        <FirstLogin loginState={loginState} setLoginState={setLoginState}/>
         : <Signup loginState={loginState} setLoginState={setLoginState}/>
         
 
       }
-      {/* <Login loginState={loginState} setLoginState={setLoginState}/> */}
+
       {/* <SignupFavorite loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
     </div>
@@ -61,6 +68,7 @@ const FirstLogin: FC<IFirstLogin> = ({loginState, setLoginState}) => {
       <button>
         Login with google
       </button>
+      <p className="account-already">Don't have an account? <span>Click here</span></p>
     </div>
   )
 }
@@ -288,11 +296,18 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
 }
 
 const SignedIn: FC<ISignedIn> = ({}) => {
+  const userData = useSelector<IRootRedux, IUserData | null>(state => state?.ui?.userData || null)
   return (
     <div className="signed-in-app">
-      <h3>
-        Hello, <span>Disky Aria Jetmiko</span>
-      </h3>
+      <div className="nav-signed-in">
+        <h3>
+          Hello, <span>{userData?.name}</span>
+        </h3>
+        <button className="btn-logout">
+          <img src={logoutBtn}/>
+        </button>
+      </div>
+      
       <SelectableList listItem={["Liked doggy", "breeds A", "breeds B"]}/>
     </div>
   )
