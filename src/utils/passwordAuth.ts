@@ -12,9 +12,7 @@ import { storeUser } from "../store/actions/ui";
 export const createAccount = async (email: string, password: string, name: string) => {
     const auth = getAuth(app)
     const db = getFirestore(app)
-    try{
-        console.log(email)
-        console.log(password)
+    try{  
         const userCred = await createUserWithEmailAndPassword(auth, email, password)
         await updateProfile(userCred.user, {displayName: name})
         const userData: IUserData = {
