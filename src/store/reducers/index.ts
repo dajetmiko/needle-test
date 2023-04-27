@@ -1,3 +1,4 @@
+import { User } from "firebase/auth";
 import { ui } from "./ui";
 import { combineReducers } from "redux";
 
@@ -7,6 +8,7 @@ import { combineReducers } from "redux";
 export interface IRootRedux {
   ui?: {
     darkMode: boolean
+    user: User | null
   }
 }
 
@@ -20,7 +22,7 @@ const allReducers = combineReducers({
   ui: ui
 })
 
-export type TypeAction = 'DARK_MODE'
+export type TypeAction = 'DARK_MODE' | 'SAVE_USER'
 
 export default allReducers
 

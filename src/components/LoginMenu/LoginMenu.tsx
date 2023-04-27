@@ -4,17 +4,18 @@ import ButtonDoggo from "../ButtonDoggo/ButtonDoggo"
 import Chip from "../Chip/Chip";
 import TextInput from "../TextInput/TextInput";
 import "./LoginMenu.scss"
-import { Dispatch, FC, SetStateAction, useState } from "react"
+import { Dispatch, FC, SetStateAction, useEffect, useState } from "react"
 import SelectableList from "../SelectableList/SelectableList";
+import { createAccount, login } from "../../utils/passwordAuth";
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("LOGINSTART");
   return (
     <div className="container-all-login">
       {/* <SignedIn loginState={loginState} setLoginState={setLoginState}/> */}
-      {/* <Signup loginState={loginState} setLoginState={setLoginState}/> */}
+      <Signup loginState={loginState} setLoginState={setLoginState}/>
       {/* <Login loginState={loginState} setLoginState={setLoginState}/> */}
-      <SignupFavorite loginState={loginState} setLoginState={setLoginState}/>
+      {/* <SignupFavorite loginState={loginState} setLoginState={setLoginState}/> */}
       {/* <FirstLogin loginState={loginState} setLoginState={setLoginState}/> */}
     </div>
   )
@@ -57,18 +58,58 @@ const Login: FC<ILogin> = ({loginState, setLoginState}) => {
 }
 
 const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
+  const [name, setName] = useState("")
+  const [nameError, setNameError] = useState<string | null>(null);
+  const [email, setEmail] = useState("")
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [password, setPassword] = useState("")
+  const [passwordError, setPasswordError] = useState<string | null>(null);
+  const [favorite, setFavorite] = useState<string[]>([])
+  const handleSignup = async () => {
+    let error = false
+    if(name === ""){
+      setNameError("Please input your name")
+      error = true
+    }
+    if(email === ""){
+      setEmailError("Please input email");
+      error = true;
+    }
+    if(password === ""){
+      setPasswordError("Please input password");
+      error = true;
+    }
+    try{
+      await createAccount(email, password, name)
+    }catch(e){
+      const er: any = e as any
+      if(er.code === "auth/email-already-in-use"){
+        setEmailError("Email is already in use")
+      }
+      if(er.code === "auth/invalid-email"){
+        setEmailError("Invalid email format")
+      }
+    }
+  }
   return (
     <div className="signup-app">
-      <TextInput label="Email" inputName="email-login-app" className="input-email"/>
-      <TextInput label="Password" hideSeek inputName="first-login-app" className="input-password"/>
+      <TextInput label="Email" onChange={(e) => setEmail(e.currentTarget.value)} 
+        errorMessage={emailError}
+        inputName="email-login-app" className="input-email"/>
+      <TextInput label="Name" onChange={(e) => setName(e.currentTarget.value)} 
+        errorMessage={nameError}
+        inputName="name-login-app" className="input-name"/>
+      <TextInput label="Password" onChange={(e) => setPassword(e.currentTarget.value)} 
+        errorMessage={passwordError}
+        hideSeek inputName="first-login-app" className="input-password"/>
       <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo" onChange={() => {}}/>
       <div className="chip-container">
-        <Chip item="breedsss" index={0} deleteButton/>
-        <Chip item="breess" index={0} deleteButton/>
-        <Chip item="bre" index={0} deleteButton/>
-        <Chip item="breedsss" index={0} deleteButton/>
+        <Chip item="breedsss" index={0} deleteButton onDelete={(index) => {
+          const newFavorite = [...favorite].splice(index, 1)
+          setFavorite(newFavorite);
+        }}/>
       </div>
-      <ButtonDoggo addedClassName="button-login">
+      <ButtonDoggo addedClassName="button-login" onClick={handleSignup}>
         Create an account 
       </ButtonDoggo>
       <p className="account-already">Already have an account? <span>Click here</span></p>

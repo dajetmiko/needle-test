@@ -6,12 +6,17 @@ export interface IAksiUI {
 }
 
 
-const jsonUI = {ui: {darkMode: true}}
+const jsonUI = {ui: {darkMode: true, user: null}}
 const initialCondition = { ...jsonUI}
 
 export function ui(state: any = initialCondition, action: IAksiUI){
   switch(action.type){
     case 'DARK_MODE':
+      return {
+        ...state,
+        ...action.payload
+      }
+    case "SAVE_USER":
       return {
         ...state,
         ...action.payload
