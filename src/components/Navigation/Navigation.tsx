@@ -5,7 +5,7 @@ import menu from "./menu.svg"
 import LoginMenu from "../LoginMenu/LoginMenu"
 import HoverComponents from "../HoverComponents/HoverComponents"
 import BreedsMenu from "../BreedsMenu/BreedsMenu"
-import useClickOutside from "../../utils/useClickOutside"
+import useClickOutside from "../../utils/domFunction"
 
 const Navigation: FC<INavigation> = ({}) => {
   const [openProfile, setOpenProfile] = useState(false);

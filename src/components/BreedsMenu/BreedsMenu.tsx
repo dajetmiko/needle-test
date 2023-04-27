@@ -1,9 +1,12 @@
+import { IResponseList, useFetchAPI } from "../../data/fetch/fetchAPI"
 import SelectableList from "../SelectableList/SelectableList"
 import "./BreedsMenu.scss"
 import { FC } from "react"
 
 const BreedsMenu: FC<IBreedsMenu> = ({}) => {
-
+  const [listBreed] 
+    = useFetchAPI<IResponseList>("https://dog.ceo/api/breeds/list/all")
+  const keysFavorite = Object.keys(listBreed?.message || {})
   return (
     <div className="breeds-menu">
       <div className="container-breeds-menu">
@@ -11,16 +14,8 @@ const BreedsMenu: FC<IBreedsMenu> = ({}) => {
           Breeds
         </h2>
         <input placeholder="Filter Breeds" className="filter-breeds"/>
-        <div className="divider-login">
-          <div className="divider-line"/>
-          <p className="divider-text">
-            Your favorites
-          </p>
-          <div className="divider-line"/>
-        </div>
-        <SelectableList listItem={["breeds 1", "breeds 2"]}/>
-        <div className="divider-line-full"/>
-        <SelectableList listItem={["breeds 1", "breeds 2", "breeds 3", "breeds 4", "breeds 5"]}/>
+
+        <SelectableList listItem={keysFavorite}/>
       </div>
     </div>
   )

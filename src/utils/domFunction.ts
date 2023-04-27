@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { MutableRefObject } from "react";
 
 
@@ -21,4 +21,24 @@ export default function useClickOutside(
         document.addEventListener("mousedown", handelClickOutside);
         return () => { document.removeEventListener("mousedown", handelClickOutside) }
     }, [refList, modalTerbuka])
+}
+
+
+
+export function useCheckOnScreen(ref: MutableRefObject<HTMLElement | null> | undefined | null) {
+
+  const [intersectionExist, setIntersectionExist] = useState(false)
+
+  const observer = new IntersectionObserver(
+    ([entry]) => setIntersectionExist(entry.isIntersecting)
+  )
+
+  useEffect(() => {
+    if (ref !== undefined && ref?.current != null) {
+      observer.observe(ref.current)
+      return () => { observer.disconnect() }
+    }
+  }, [ref, ref?.current])
+
+  return intersectionExist
 }

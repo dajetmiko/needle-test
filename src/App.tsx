@@ -18,7 +18,6 @@ function App() {
     const db = getFirestore()
     if(!user) return;
     const ss = onSnapshot(doc(db, `user/${user.uid}`), (data) => {
-      console.log("data", data.data())
       const userData = data.data() as IUserData | undefined
       dispatch(storeUserData(userData || null))
     })

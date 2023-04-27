@@ -9,7 +9,7 @@ const userData = JSON.parse(localStorage.getItem("userdoggodata")  || "null")
 const user = JSON.parse(localStorage.getItem("userdoggo") || "null")
 const darkMode = localStorage.getItem("darkMode") === "1"
 
-const jsonUI = {ui: {darkMode: darkMode, user: user, userData: userData}}
+const jsonUI = {darkMode: darkMode, user: user, userData: userData}
 const initialCondition = { ...jsonUI}
 console.log(initialCondition)
 

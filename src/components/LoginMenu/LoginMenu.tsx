@@ -1,20 +1,22 @@
 import { ListFormat } from "typescript";
-import useClickOutside from "../../utils/useClickOutside";
+import useClickOutside from "../../utils/domFunction";
 import ButtonDoggo from "../ButtonDoggo/ButtonDoggo"
 import Chip from "../Chip/Chip";
 import TextInput from "../TextInput/TextInput";
 import "./LoginMenu.scss"
 import { ChangeEvent, Dispatch, FC, SetStateAction, useEffect, useRef, useState } from "react"
 import SelectableList from "../SelectableList/SelectableList";
-import { createAccount, login } from "../../utils/passwordAuth";
+import { createAccount, createAccountData, login, signInGoogleNeedle } from "../../utils/passwordAuth";
 import ErrorText from "../ErrorText/ErrorText";
 import { FirebaseError } from "firebase/app";
 import { IResponseList, useFetchAPI } from "../../data/fetch/fetchAPI";
 import { useDispatch, useSelector } from "react-redux";
 import { IRootRedux } from "../../store/reducers";
-import { User } from "firebase/auth";
+import { User, getAuth, signOut } from "firebase/auth";
 import { IUserData } from "../../data/userData";
 import logoutBtn from "./logout-btn.svg"
+import { storeUser, storeUserData } from "../../store/actions/ui";
+import loginGoogle from "./login-google.svg"
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("CREATEACCOUNT");
@@ -26,7 +28,7 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
     }else if(user){
       setLoginState("CHOSEFAVORITE")
     }else{
-      setLoginState("LOGIN")
+      setLoginState("LOGINSTART")
 
     }
   }, [user, userData])
@@ -36,8 +38,10 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
         <SignedIn loginState={loginState} setLoginState={setLoginState}/>
         : loginState === "CHOSEFAVORITE" ?
         <SignupFavorite loginState={loginState} setLoginState={setLoginState} /> 
-        : loginState === "LOGIN" ? 
+        : loginState === "LOGINSTART" ? 
         <FirstLogin loginState={loginState} setLoginState={setLoginState}/>
+        : loginState === "LOGIN" ?
+        <Login loginState={loginState} setLoginState={setLoginState}/>
         : <Signup loginState={loginState} setLoginState={setLoginState}/>
         
 
@@ -50,9 +54,13 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
 }
 
 const FirstLogin: FC<IFirstLogin> = ({loginState, setLoginState}) => {
+  const dispatch = useDispatch();
+  const handleLogin = () => {
+    signInGoogleNeedle(dispatch);
+  }
   return (
     <div className="login-start">
-      <ButtonDoggo addedClassName="button-login">
+      <ButtonDoggo addedClassName="button-login" onClick={() => setLoginState("LOGIN")}>
         Login
       </ButtonDoggo>
       <div className="divider-login">
@@ -62,26 +70,57 @@ const FirstLogin: FC<IFirstLogin> = ({loginState, setLoginState}) => {
         </p>
         <div className="divider-line"/>
       </div>
-      <button>
-        Login with facebook
+      <button className="button-login-with-google" onClick={() => handleLogin()}>
+        <img src={loginGoogle}/><div>Login with google</div>
       </button>
-      <button>
-        Login with google
-      </button>
-      <p className="account-already">Don't have an account? <span>Click here</span></p>
+      
+      <p className="account-already" 
+        onClick={() => setLoginState("CREATEACCOUNT")}>
+        Don't have an account? <span>Click here</span></p>
     </div>
   )
 }
 
 const Login: FC<ILogin> = ({loginState, setLoginState}) => {
+  const [email, setEmail] = useState("")
+  const [errorEmail, setErrorEmail] = useState<string | null>(null)
+  const [password, setPassword] = useState("")
+  const [errorPassword, setErrorPassword] = useState<string | null>(null)
+  const dispatch = useDispatch()
+  const handleLogin = async () => {
+    try{
+      await login(email, password, dispatch)
+    }catch(e){
+      const er = e as FirebaseError;
+      if(er.code === "auth/wrong-password"){
+        setErrorPassword("Wrong password")
+      }
+      if(er.code === "auth/user-not-found"){
+        setErrorEmail("Wrong password")
+      }
+      console.error(er)
+    }
+  }
   return (
     <div className="login-app">
-      <TextInput label="Email" inputName="first-login-app" className="input-email"/>
-      <TextInput label="Password" hideSeek inputName="first-login-app" className="input-password"/>
-      <ButtonDoggo addedClassName="button-login">
+      <TextInput label="Email" 
+        onChange={(e) => setEmail(e.currentTarget.value)} 
+        value={email} inputName="first-login-app" 
+        errorMessage={errorEmail}
+        className="input-email"/>
+      <TextInput 
+        onChange={(e) => setPassword(e.currentTarget.value)} 
+        label="Password" 
+        hideSeek 
+        errorMessage={errorPassword}
+        inputName="first-login-app" 
+        className="input-password"/>
+      <ButtonDoggo addedClassName="button-login" onClick={handleLogin}>
         Login
       </ButtonDoggo>
-      <p className="account-already">Don't have an account? <span>Click here</span></p>
+      <p className="account-already" 
+        onClick={() => setLoginState("CREATEACCOUNT")}>
+        Don't have an account? <span>Click here</span></p>
     </div>
   )
 }
@@ -213,14 +252,17 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
       <ButtonDoggo addedClassName="button-login" onClick={handleSignup}>
         Create an account 
       </ButtonDoggo>
-      <p className="account-already">Already have an account? <span>Click here</span></p>
+      <p className="account-already">Already have an account? <span onClick={() => setLoginState("LOGIN")}>Click here</span></p>
     </div>
   )
 }
 
 const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
   const user = useSelector<IRootRedux, User | null>(state => (state?.ui?.user || null));
-
+  const [name, setName] = useState("")
+  const [nameError, setNameError] = useState<null | string>(null)
+  const [errorGeneral, setErrorGeneral] = useState<null | string>(null)
+  useEffect(() => {setName(user?.displayName || "")}, [user])
   const [listBreed] 
     = useFetchAPI<IResponseList>("https://dog.ceo/api/breeds/list/all")
   const [favorite, setFavorite] = useState<string[]>([])
@@ -233,7 +275,8 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
   useClickOutside(() => setFocusFavorite(false), focusFavorite, [refSelectable])
   const keysFavorite = Object.keys(listBreed?.message || {})
   const resetError = () => {
-    setFavoriteError(null)
+    setFavoriteError(null);
+    setNameError(null);
   }
   const onBreedsSelected = (item: string) => {
     const newFav = [...favorite];
@@ -265,8 +308,36 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
     })
     setFavoriteFilter(newFavFilter)
   }
+  const dispatch = useDispatch();
+  const handleSignup = async () => {
+    resetError();
+    let error = false
+    if(name === ""){
+      setNameError("Please input your name")
+      error = true
+    }
+    if(user === null){
+      setNameError("User is not right")
+      error = true
+    }
+    if(error) return;
+    try{
+      await createAccountData(name, favorite, dispatch);
+    }catch(e){
+      const er: FirebaseError = e as FirebaseError
+      setErrorGeneral("Something is wrong")
+    }
+  }
   return (
     <div className="signup-app">
+      <TextInput 
+        label="Name"
+        inputName="fav-name"
+        className="input-name"
+        value={name}
+        onChange={(e) => setName(e.currentTarget.value)}
+        errorMessage={nameError}
+      />
       <div className="container-favorite" ref={refSelectable}>
         <TextInput label="Favorite Doggo" inputName="first-login-app" className="input-doggo"
         value={favoriteInput}
@@ -288,7 +359,8 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
           }}/>)
         }
       </div>
-      <ButtonDoggo addedClassName="button-login">
+      {errorGeneral && <ErrorText>{errorGeneral}</ErrorText>}
+      <ButtonDoggo addedClassName="button-login" onClick={handleSignup}>
         Create an account
       </ButtonDoggo>
     </div>
@@ -297,13 +369,24 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
 
 const SignedIn: FC<ISignedIn> = ({}) => {
   const userData = useSelector<IRootRedux, IUserData | null>(state => state?.ui?.userData || null)
+  const dispatch = useDispatch()
+  const signOutApp = async () => {
+    const auth = getAuth()
+    try{
+      await signOut(auth)
+      dispatch(storeUser(null))
+      dispatch(storeUserData(null))
+    }catch(e){
+      console.error(e)
+    }
+  }
   return (
     <div className="signed-in-app">
       <div className="nav-signed-in">
         <h3>
           Hello, <span>{userData?.name}</span>
         </h3>
-        <button className="btn-logout">
+        <button className="btn-logout" onClick={signOutApp}>
           <img src={logoutBtn}/>
         </button>
       </div>
@@ -330,6 +413,6 @@ interface ISignedIn {
   loginState: TLoginState
   setLoginState: Dispatch<SetStateAction<TLoginState>>
 }
-type TLoginState = "LOGINSTART" | "LOGIN" | "CREATEACCOUNT" | "LOADINGIN" | "CHOSEFAVORITE" | "LOADINGOUT" | "SIGNEDIN"
+type TLoginState = "LOGINSTART" | "LOGIN" | "CREATEACCOUNT" | "LOADING" | "CHOSEFAVORITE" | "SIGNEDIN"
 
 export default LoginMenu
