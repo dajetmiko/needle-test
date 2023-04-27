@@ -29,7 +29,6 @@ const LoginMenu: FC<ILoginMenu> = ({}) => {
       setLoginState("CHOSEFAVORITE")
     }else{
       setLoginState("LOGINSTART")
-
     }
   }, [user, userData])
   return (
@@ -391,7 +390,14 @@ const SignedIn: FC<ISignedIn> = ({}) => {
         </button>
       </div>
       
-      <SelectableList listItem={["Liked doggy", "breeds A", "breeds B"]}/>
+      <SelectableList 
+        listItem={["Liked doggy"].concat(userData?.favoriteDogs || [])}
+        onIndexSelected={(index) => {
+          if(index === 0){
+
+          }
+        }}
+        />
     </div>
   )
 }

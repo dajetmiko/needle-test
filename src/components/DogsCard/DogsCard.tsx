@@ -2,11 +2,36 @@ import "./DogsCard.scss"
 import { FC, MutableRefObject, useEffect, useState } from "react"
 import testImage from "./test-image.jpg"
 import love from "./love.svg"
+import loveFilled from "./love-filled.svg"
 import { IResponseImage, fetchAPI } from "../../data/fetch/fetchAPI"
+import { ILike } from "../../pages/LikedPage/LikedPage"
+import { useSelector } from "react-redux"
+import { IRootRedux } from "../../store/reducers"
+import { IUserData } from "../../data/userData"
+import axios from "axios"
+import { doc, getFirestore, onSnapshot } from "firebase/firestore"
+import { app } from "../../data/firebaseSetup"
 
 const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
   const [dogsData, setDogsData] = useState<IDogsData | null>(null);
-  console.log(last, index)
+  const userData = useSelector<IRootRedux, IUserData | null>(state => state.ui?.userData || null)
+  const [liked, setLiked] = useState(false)
+
+  useEffect(() => {
+    const db = getFirestore(app)
+    if(!userData?.userId || !dogsData?.image) return
+    const ss = onSnapshot(doc(db, "userLiked", userData?.userId + encodeURIComponent(dogsData?.image)), (doc) => {
+      console.log("snapshot")
+      if(doc.exists()){
+        setLiked(true)
+      }else{
+        setLiked(false)
+      }
+    })
+    return () => ss()
+  }, [dogsData, userData])
+  
+
   useEffect(() => {
     const fetch = async () => {
       try{
@@ -25,6 +50,21 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
     fetch()
   }, [])
 
+  const handlePostLike = async () => {
+    if(userData && dogsData){
+      const like: ILike = {
+        userId: userData.userId,
+        image: dogsData.image || "",
+        breed: dogsData.breeds
+      }
+      try{
+        await axios.post("https://us-central1-doggoneedle.cloudfunctions.net/api/addLike", like)
+      }catch(e){
+        console.error(e)
+      }
+    }
+  }
+
   return (
     <div className="dogs-card-container" ref={last ? (refLast as MutableRefObject<HTMLDivElement | null>) : undefined}>
       <div className="dogs-card">
@@ -33,7 +73,7 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
           <p className="dogs-name">
             {dogsData?.breeds}
           </p>
-          <img className="dogs-love" src={love}/>
+          <img className="dogs-love" src={liked ? loveFilled : love} onClick={() => handlePostLike()}/>
         </div>
       </div>
     </div>
@@ -41,6 +81,36 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
 }
 
 export const DogsCardImage: FC<IDogsCardImage> = ({image, refLast, last, breeds, index}) => {
+  const userData = useSelector<IRootRedux, IUserData | null>(state => state.ui?.userData || null)
+  const [liked, setLiked] = useState(false)
+
+  useEffect(() => {
+    const db = getFirestore(app)
+    const ss = onSnapshot(doc(db, "userLiked", userData?.userId + encodeURIComponent(image)), (doc) => {
+      console.log("snapshot");
+      if(doc.exists()){
+        setLiked(true)
+      }else{
+        setLiked(false)
+      }
+    })
+    return () => ss()
+  }, [image, userData])
+  
+  const handlePostLike = async () => {
+    if(userData && image){
+      const like: ILike = {
+        userId: userData.userId,
+        image: image,
+        breed: breeds
+      }
+      try{
+        await axios.post("https://us-central1-doggoneedle.cloudfunctions.net/api/addLike", like)
+      }catch(e){
+        console.error(e)
+      }
+    }
+  }
   return (
     <div className="dogs-card-container" ref={last ? (refLast as MutableRefObject<HTMLDivElement | null>) : undefined}>
       <div className="dogs-card">
@@ -49,7 +119,7 @@ export const DogsCardImage: FC<IDogsCardImage> = ({image, refLast, last, breeds,
           <p className="dogs-name">
             {breeds}
           </p>
-          <img className="dogs-love" src={love}/>
+          <img className="dogs-love" src={liked ? loveFilled : love} onClick={() => handlePostLike()}/>
         </div>
       </div>
     </div>

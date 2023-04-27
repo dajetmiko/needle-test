@@ -37,7 +37,7 @@ const HomePage: FC<IHomePage> = ({}) => {
   }, [lastOnScreen])
 
   return (
-
+    
       <div className="dogs-feeds">
         <Navigation />
         <div className="dogs-container">

@@ -9,6 +9,7 @@ import { IUserData } from './data/userData';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootRedux } from './store/reducers';
 import { User } from 'firebase/auth';
+import { Routes, Route} from 'react-router';
 
 function App() {
   useAuthStateChange()
@@ -25,7 +26,17 @@ function App() {
   }, [user])
   return (
     <div className="App">
-      <HomePage />
+      <Routes>
+        <Route
+          path="/"
+          element={<HomePage />}
+        />
+        <Route
+          path="/liked"
+          element={<HomePage />}
+        />
+
+      </Routes>
     </div>
   );
 }
