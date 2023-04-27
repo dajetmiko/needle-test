@@ -40,6 +40,22 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
   )
 }
 
+export const DogsCardImage: FC<IDogsCardImage> = ({image, refLast, last, breeds, index}) => {
+  return (
+    <div className="dogs-card-container" ref={last ? (refLast as MutableRefObject<HTMLDivElement | null>) : undefined}>
+      <div className="dogs-card">
+        <img src={image} className="dogs-image" loading="lazy"/>
+        <div className="dogs-info">
+          <p className="dogs-name">
+            {breeds}
+          </p>
+          <img className="dogs-love" src={love}/>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 interface IDogsCard {
   keyBreed: string;
   refLast?: MutableRefObject<HTMLDivElement | null>
@@ -47,10 +63,19 @@ interface IDogsCard {
   index: number;
 }
 
+interface IDogsCardImage {
+  image: string;
+  refLast?: MutableRefObject<HTMLDivElement | null>
+  last?: boolean;
+  breeds: string;
+  index: number
+}
+
 export interface IDogsData {
   breeds: string,
   image: string,
   liked: boolean
 }
+
 
 export default DogsCard

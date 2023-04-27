@@ -38,3 +38,15 @@ export const storeUserData = (payload: IUserData | null) => {
     payload: payloadItem
   } as IAction
 }
+
+export const storeBreedsSelected = (payload: string | null) => {
+  const tipe: TypeAction = "SAVE_BREED_SELECTED"
+
+  const payloadItem = {
+    breedsSelected: payload
+  }
+  return {
+    type: tipe,
+    payload: payloadItem
+  } as IAction
+}

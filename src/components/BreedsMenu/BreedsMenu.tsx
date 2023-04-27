@@ -1,12 +1,15 @@
+import { useDispatch } from "react-redux"
 import { IResponseList, useFetchAPI } from "../../data/fetch/fetchAPI"
 import SelectableList from "../SelectableList/SelectableList"
 import "./BreedsMenu.scss"
 import { FC } from "react"
+import { storeBreedsSelected } from "../../store/actions/ui"
 
 const BreedsMenu: FC<IBreedsMenu> = ({}) => {
   const [listBreed] 
     = useFetchAPI<IResponseList>("https://dog.ceo/api/breeds/list/all")
   const keysFavorite = Object.keys(listBreed?.message || {})
+  const dispatch = useDispatch()
   return (
     <div className="breeds-menu">
       <div className="container-breeds-menu">
@@ -15,7 +18,9 @@ const BreedsMenu: FC<IBreedsMenu> = ({}) => {
         </h2>
         <input placeholder="Filter Breeds" className="filter-breeds"/>
 
-        <SelectableList listItem={keysFavorite}/>
+        <SelectableList listItem={keysFavorite} onSelected={(selected) => {
+          dispatch(storeBreedsSelected(selected))
+        }}/>
       </div>
     </div>
   )

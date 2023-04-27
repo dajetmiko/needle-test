@@ -14,12 +14,13 @@ export const fetchAPI = async <IType>(link: string) => {
     }
 }
 
-export const useFetchAPI = <IType>(link: string) => {
+export const useFetchAPI = <IType>(link: string | null) => {
     const [data, setData] = useState<IType | null>(null)
     const [error, setError] = useState<any>(null)
     useEffect(() => {
         const fetch = async () => {
             try{
+                if(!link) return;
                 const dataGot = await fetchAPI<IType>(link);
                 setData(dataGot)
             }catch(e){
@@ -37,6 +38,10 @@ export interface IResponseList {
     "message": {
         [dogName: string]: string[]
     },
+    "status": string
+}
+export interface IResponseListBreed {
+    "message": string[],
     "status": string
 }
 

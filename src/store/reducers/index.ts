@@ -11,6 +11,7 @@ export interface IRootRedux {
     darkMode: boolean
     user: User | null
     userData: IUserData | null
+    breedsSelected: string | null
   }
 }
 
@@ -24,7 +25,7 @@ const allReducers = combineReducers({
   ui: ui
 })
 
-export type TypeAction = 'DARK_MODE' | 'SAVE_USER' | 'SAVE_USER_DATA'
+export type TypeAction = 'DARK_MODE' | 'SAVE_USER' | 'SAVE_USER_DATA' | 'SAVE_BREED_SELECTED'
 
 export default allReducers
 

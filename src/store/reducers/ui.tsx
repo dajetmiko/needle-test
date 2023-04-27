@@ -8,8 +8,9 @@ export interface IAksiUI {
 const userData = JSON.parse(localStorage.getItem("userdoggodata")  || "null") 
 const user = JSON.parse(localStorage.getItem("userdoggo") || "null")
 const darkMode = localStorage.getItem("darkMode") === "1"
+const breedsSelected = null
 
-const jsonUI = {darkMode: darkMode, user: user, userData: userData}
+const jsonUI = {darkMode: darkMode, user: user, userData: userData, breedsSelected}
 const initialCondition = { ...jsonUI}
 console.log(initialCondition)
 
@@ -26,10 +27,15 @@ export function ui(state: any = initialCondition, action: IAksiUI){
         ...action.payload
       }
     case "SAVE_USER_DATA":
-        return {
-          ...state,
-          ...action.payload
-        }
+      return {
+        ...state,
+        ...action.payload
+      }
+    case "SAVE_BREED_SELECTED":
+      return {
+        ...state,
+        ...action.payload
+      }
     default:
       return state 
   }
