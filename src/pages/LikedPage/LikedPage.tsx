@@ -21,8 +21,6 @@ const LikedPage: FC<ILikedPage> = ({}) => {
       const db = getFirestore(app)
       const q = query(collection(db, "userLiked"), where("userId", "==", userData?.userId), orderBy("dateAdded", "desc"));
       const docs = await  getDocs(q)
-      console.log('docs')
-      console.log(docs.docs)
       const data = docs.docs.map((doc) => {
         const docData = doc.data() as ILikeDate
         return docData
@@ -40,7 +38,7 @@ const LikedPage: FC<ILikedPage> = ({}) => {
             likedImage.map((liked, index) => <DogsCardImage 
               key={index} 
               index={index} 
-              breeds={liked.breed} image={liked.image}/>)
+              breeds={liked.breeds} image={liked.image}/>)
           }
         </div>
       </div>
@@ -50,13 +48,13 @@ const LikedPage: FC<ILikedPage> = ({}) => {
 export interface ILike {
   userId: string;
   image: string;
-  breed: string;
+  breeds: string;
 }
 
 export interface ILikeDate {
   userId: string;
   image: string;
-  breed: string;
+  breeds: string;
   dateAdded: Timestamp
 }
 

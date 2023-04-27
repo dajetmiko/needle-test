@@ -6,6 +6,7 @@ import LoginMenu from "../LoginMenu/LoginMenu"
 import HoverComponents from "../HoverComponents/HoverComponents"
 import BreedsMenu from "../BreedsMenu/BreedsMenu"
 import useClickOutside from "../../utils/domFunction"
+import { useNavigate } from "react-router-dom"
 
 const Navigation: FC<INavigation> = ({}) => {
   const [openProfile, setOpenProfile] = useState(false);
@@ -14,9 +15,10 @@ const Navigation: FC<INavigation> = ({}) => {
   const refBreeds = useRef<HTMLDivElement>(null)
   useClickOutside(() => {setOpenBreeds(false);}, openBreeds, [refBreeds])
   useClickOutside(() => {setOpenProfile(false);}, openProfile, [ref])
+  const navigate = useNavigate()
   return (
     <nav className="app-navigation">
-      <h1 className="title-explorer">
+      <h1 className="title-explorer" onClick={() => navigate(`/`)}>
         Dog Explorer
       </h1>
       <div className="navigation">

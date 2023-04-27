@@ -55,7 +55,7 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, setRef, last, index}) => {
       const like: ILike = {
         userId: userData.userId,
         image: dogsData.image || "",
-        breed: dogsData.breeds
+        breeds: dogsData.breeds
       }
       try{
         await axios.post("https://us-central1-doggoneedle.cloudfunctions.net/api/addLike", like)
@@ -66,14 +66,14 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, setRef, last, index}) => {
   }
 
   return (
-    <div className="dogs-card-container" ref={setRef}>
+    <div className="dogs-card-container" ref={setRef} onClick={() => handlePostLike()}>
       <div className="dogs-card">
         <img src={dogsData?.image} className="dogs-image" loading="lazy"/>
         <div className="dogs-info">
           <p className="dogs-name">
             {dogsData?.breeds}
           </p>
-          <img className="dogs-love" src={liked ? loveFilled : love} onClick={() => handlePostLike()}/>
+          <img className="dogs-love" src={liked ? loveFilled : love} />
         </div>
       </div>
     </div>
@@ -102,7 +102,7 @@ export const DogsCardImage: FC<IDogsCardImage> = ({image, setRef, last, breeds, 
       const like: ILike = {
         userId: userData.userId,
         image: image,
-        breed: breeds
+        breeds: breeds
       }
       try{
         await axios.post("https://us-central1-doggoneedle.cloudfunctions.net/api/addLike", like)
@@ -112,7 +112,7 @@ export const DogsCardImage: FC<IDogsCardImage> = ({image, setRef, last, breeds, 
     }
   }
   return (
-    <div className="dogs-card-container" ref={setRef}>
+    <div className="dogs-card-container" ref={setRef} onClick={() => handlePostLike()}>
       <div className="dogs-card">
         <img src={image} className="dogs-image" loading="lazy"/>
         <div className="dogs-info">
