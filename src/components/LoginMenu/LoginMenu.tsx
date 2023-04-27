@@ -15,8 +15,9 @@ import { IRootRedux } from "../../store/reducers";
 import { User, getAuth, signOut } from "firebase/auth";
 import { IUserData } from "../../data/userData";
 import logoutBtn from "./logout-btn.svg"
-import { storeUser, storeUserData } from "../../store/actions/ui";
+import { storeBreedsSelected, storeUser, storeUserData } from "../../store/actions/ui";
 import loginGoogle from "./login-google.svg"
+import { useNavigate } from "react-router-dom";
 
 const LoginMenu: FC<ILoginMenu> = ({}) => {
   const [loginState, setLoginState] = useState<TLoginState>("CREATEACCOUNT");
@@ -201,6 +202,13 @@ const Signup: FC<ISignup> = ({loginState, setLoginState}) => {
     setFocusFavorite(false);
     setFavoriteInput("");
   }
+  useEffect(() => {
+    let newFavFilter: string[] = []
+    keysFavorite.forEach((text) => {
+      newFavFilter.push(text)
+    })
+    setFavoriteFilter(newFavFilter)
+  }, [listBreed])
   const onFilterDoggo = (e: ChangeEvent<HTMLInputElement>) => {
     const regWord = new RegExp(e.currentTarget.value);
     setFavoriteInput(e.currentTarget.value);
@@ -295,6 +303,13 @@ const SignupFavorite: FC<ISignup> = ({loginState, setLoginState}) => {
     setFocusFavorite(false);
     setFavoriteInput("");
   }
+  useEffect(() => {
+    let newFavFilter: string[] = []
+    keysFavorite.forEach((text) => {
+      newFavFilter.push(text)
+    })
+    setFavoriteFilter(newFavFilter)
+  }, [keysFavorite])
   const onFilterDoggo = (e: ChangeEvent<HTMLInputElement>) => {
     const regWord = new RegExp(e.currentTarget.value);
     setFavoriteInput(e.currentTarget.value);
@@ -379,6 +394,7 @@ const SignedIn: FC<ISignedIn> = ({}) => {
       console.error(e)
     }
   }
+  const navigate = useNavigate();
   return (
     <div className="signed-in-app">
       <div className="nav-signed-in">
@@ -394,7 +410,10 @@ const SignedIn: FC<ISignedIn> = ({}) => {
         listItem={["Liked doggy"].concat(userData?.favoriteDogs || [])}
         onIndexSelected={(index) => {
           if(index === 0){
-
+            navigate(`/liked`)
+          }else{
+            navigate(`/`)
+            dispatch(storeBreedsSelected(userData?.favoriteDogs?.[index] || null)) 
           }
         }}
         />

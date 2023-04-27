@@ -12,7 +12,7 @@ import axios from "axios"
 import { doc, getFirestore, onSnapshot } from "firebase/firestore"
 import { app } from "../../data/firebaseSetup"
 
-const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
+const DogsCard: FC<IDogsCard> = ({keyBreed, setRef, last, index}) => {
   const [dogsData, setDogsData] = useState<IDogsData | null>(null);
   const userData = useSelector<IRootRedux, IUserData | null>(state => state.ui?.userData || null)
   const [liked, setLiked] = useState(false)
@@ -66,7 +66,7 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
   }
 
   return (
-    <div className="dogs-card-container" ref={last ? (refLast as MutableRefObject<HTMLDivElement | null>) : undefined}>
+    <div className="dogs-card-container" ref={setRef}>
       <div className="dogs-card">
         <img src={dogsData?.image} className="dogs-image" loading="lazy"/>
         <div className="dogs-info">
@@ -80,7 +80,7 @@ const DogsCard: FC<IDogsCard> = ({keyBreed, refLast, last, index}) => {
   )
 }
 
-export const DogsCardImage: FC<IDogsCardImage> = ({image, refLast, last, breeds, index}) => {
+export const DogsCardImage: FC<IDogsCardImage> = ({image, setRef, last, breeds, index}) => {
   const userData = useSelector<IRootRedux, IUserData | null>(state => state.ui?.userData || null)
   const [liked, setLiked] = useState(false)
 
@@ -112,7 +112,7 @@ export const DogsCardImage: FC<IDogsCardImage> = ({image, refLast, last, breeds,
     }
   }
   return (
-    <div className="dogs-card-container" ref={last ? (refLast as MutableRefObject<HTMLDivElement | null>) : undefined}>
+    <div className="dogs-card-container" ref={setRef}>
       <div className="dogs-card">
         <img src={image} className="dogs-image" loading="lazy"/>
         <div className="dogs-info">
@@ -128,14 +128,14 @@ export const DogsCardImage: FC<IDogsCardImage> = ({image, refLast, last, breeds,
 
 interface IDogsCard {
   keyBreed: string;
-  refLast?: MutableRefObject<HTMLDivElement | null>
+  setRef?: (ref: HTMLDivElement | null) => void
   last?: boolean;
   index: number;
 }
 
 interface IDogsCardImage {
   image: string;
-  refLast?: MutableRefObject<HTMLDivElement | null>
+  setRef?: (ref: HTMLDivElement | null) => void
   last?: boolean;
   breeds: string;
   index: number

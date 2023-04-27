@@ -4,7 +4,7 @@ import Navigation from "../../components/Navigation/Navigation"
 import { IResponseImage, IResponseList, IResponseListBreed, fetchAPI, useFetchAPI } from "../../data/fetch/fetchAPI"
 import { useCheckOnScreen } from "../../utils/domFunction"
 import "./HomePage.scss"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useCallback, useEffect, useRef, useState } from "react"
 import { IRootRedux } from "../../store/reducers"
 
 const pageTotal = 12
@@ -20,7 +20,12 @@ const HomePage: FC<IHomePage> = ({}) => {
   const [lastPageSeen, setLastPageSeen] = useState(false);
   const [page, setPage] = useState(1)
   const [keysBreeds, setKeyBreeds] = useState<string[]>([])
-  const refLast = useRef<HTMLDivElement | null>(null)
+  const [refLast, setRefLast] = useState<HTMLDivElement | null>(null)
+  const setRef = useCallback((ref: HTMLDivElement | null) => {
+    if (ref !== null) {
+      setRefLast(ref)
+    }
+  }, []);
 
   const lastOnScreen = useCheckOnScreen(refLast)
   useEffect(() => {
@@ -37,16 +42,16 @@ const HomePage: FC<IHomePage> = ({}) => {
   }, [lastOnScreen])
 
   return (
-    
+
       <div className="dogs-feeds">
         <Navigation />
         <div className="dogs-container">
           {breedsSelected ? 
-            listBreed?.message.map((image, index) => index > (page * pageTotal - 1) ? <></> : 
-            <DogsCardImage key={index} index={index} breeds={breedsSelected} image={image} last={index === (pageTotal * page - 1)} refLast={refLast}/>)
+            listBreed?.message.map((image, index) => index > ((page * pageTotal) - 1) ? <></> : 
+            <DogsCardImage key={index} index={index} breeds={breedsSelected} image={image} last={index === ((pageTotal * page) - 2)} setRef={setRef}/>)
             :
-            keysBreeds.map((keyBreed, index) => index > (page * pageTotal - 1) ? <></> : 
-            <DogsCard key={index} index={index} keyBreed={keyBreed} last={index === (pageTotal * page - 1)} refLast={refLast}/>)
+            keysBreeds.map((keyBreed, index) => index > ((page * pageTotal) - 1) ? <></> : 
+            <DogsCard key={index} index={index} keyBreed={keyBreed} last={index === ((pageTotal * page) - 2)} setRef={setRef}/>)
           }
         </div>
       </div>

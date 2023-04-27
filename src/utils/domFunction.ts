@@ -25,7 +25,7 @@ export default function useClickOutside(
 
 
 
-export function useCheckOnScreen(ref: MutableRefObject<HTMLElement | null> | undefined | null) {
+export function useCheckOnScreen(ref: HTMLElement | null) {
 
   const [intersectionExist, setIntersectionExist] = useState(false)
 
@@ -34,11 +34,11 @@ export function useCheckOnScreen(ref: MutableRefObject<HTMLElement | null> | und
   )
 
   useEffect(() => {
-    if (ref !== undefined && ref?.current != null) {
-      observer.observe(ref.current)
+    if (ref !== null) {
+      observer.observe(ref)
       return () => { observer.disconnect() }
     }
-  }, [ref, ref?.current])
+  }, [ref])
 
   return intersectionExist
 }

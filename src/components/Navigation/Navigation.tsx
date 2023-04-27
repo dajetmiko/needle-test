@@ -9,8 +9,11 @@ import useClickOutside from "../../utils/domFunction"
 
 const Navigation: FC<INavigation> = ({}) => {
   const [openProfile, setOpenProfile] = useState(false);
+  const [openBreeds, setOpenBreeds] = useState(false);
   const ref = useRef<HTMLDivElement>(null)
-  useClickOutside(() => {setOpenProfile(false); console.log("a")}, openProfile, [ref])
+  const refBreeds = useRef<HTMLDivElement>(null)
+  useClickOutside(() => {setOpenBreeds(false);}, openBreeds, [refBreeds])
+  useClickOutside(() => {setOpenProfile(false);}, openProfile, [ref])
   return (
     <nav className="app-navigation">
       <h1 className="title-explorer">
@@ -19,9 +22,11 @@ const Navigation: FC<INavigation> = ({}) => {
       <div className="navigation">
         <HoverComponents 
           onHover={<BreedsMenu />}
+          refK={refBreeds}
+          open={openBreeds}
           leftHover={-285}
           topHover={50}>
-          <button className="nav-breed icon-margin">
+          <button className="nav-breed icon-margin" onClick={() => setOpenBreeds(!openBreeds)}>
             <img className="img-nav-breed" src={menu}/>
           </button>
         </HoverComponents>
