@@ -22,7 +22,7 @@ const BreedsMenu: FC<IBreedsMenu> = ({}) => {
     setFavoriteFilter(newFavFilter)
   }, [listBreed])
   const onFilterDoggo = (e: ChangeEvent<HTMLInputElement>) => {
-    const regWord = new RegExp(e.currentTarget.value);
+    const regWord = new RegExp(e.currentTarget.value, "i");
     setFavoriteInput(e.currentTarget.value);
     setFavoriteFilter([])
     let newFavFilter: string[] = []
