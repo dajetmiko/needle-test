@@ -42,3 +42,25 @@ export function useCheckOnScreen(ref: HTMLElement | null) {
 
   return intersectionExist
 }
+
+export function useScreenDimension() {
+  const [screenDimension, setDimensiLayar] = useState(dapatkanDimensiLayar());
+
+  useEffect(() => {
+    function handelResize() {
+      setDimensiLayar(dapatkanDimensiLayar())
+    }
+    window.addEventListener('resize', handelResize)
+    return () => window.removeEventListener('resize', handelResize)
+  }, [])
+
+  return screenDimension
+}
+
+function dapatkanDimensiLayar() {
+  const { innerWidth: width, innerHeight: height } = window;
+  return [
+    width,
+    height
+  ]
+}
